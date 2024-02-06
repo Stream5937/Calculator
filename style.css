@@ -1,0 +1,61 @@
+/* odin calculator project styles*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    box-sizing: border-box;
+    font-size: 10px;
+    background-color: darkslategray;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+  }
+  
+  body {
+    display: flex;
+    justify-content:center;
+    align-content:center;
+    text-align: center;
+    font-family: 'Inconsolata', monospace;
+  }
+
+  .container {
+    background-color: darkslategray;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;                   /*400px;               /*100vw;*/
+    height: 100vh;                  /*500px;              /*100vh;*/
+  }
+
+  .nav-bar {
+    height: 8%;
+    background-color:black;
+  }
+
+  .history {
+    height: 25%;
+    background-color:darkslategray;
+    border-style: solid;
+   /* border-color: slategrey;*/
+    border-color: black;
+
+  }
+
+  .input {
+    height: 12%;
+    background-color:darkslategray;
+    border-style: solid;
+   /* border-color: slategrey;*/
+    border-color: black;
+  }
+
+  .buttons {
+    height: 55%;
+    background-color:darkslategray;
+    border-style: solid;
+   /* border-color: slategrey;*/
+    border-color: black;
+  }
+

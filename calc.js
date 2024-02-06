@@ -9,6 +9,12 @@ let operator = null;
 
 
 //functions
+//DISABLE SCROLL
+function noflow () {
+    document.body.style.overflow = "hidden";
+    document.body.style.userSelect = "none";
+    console.log("Scrollbars disabled");
+  }
 
 //add two numbers and return result
 function add (a, b) {
@@ -36,7 +42,7 @@ function divide (a, b) {
 
 //apply the selected operator to first and second numbers
 function operate ( first, second, operator){
-    const operators = ['bracket', 'order', 'divide', 'multiply', 'add', 'subtract'];
+    //const operators = ['bracket', 'order', 'divide', 'multiply', 'add', 'subtract'];
     const result = NaN;
     //if(operators.indexOf(operator,0)){}
     switch(operator){
@@ -64,3 +70,8 @@ function operate ( first, second, operator){
 }
 
 //add event listeners
+
+
+
+//run code
+noflow();
