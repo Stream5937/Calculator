@@ -1,0 +1,9 @@
+Project notes
+Difficulty getting initial browser window to open to the size desired especially if running in a window tab
+so my workaround:
+	Intiate the calculator by running Calculator.html
+	this just opens directly a new pop-up browser window calc.html 
+	to my desired size at my desired screen coords
+	then promptly shuts its self down so is not seen.
+	All action then resolves around calc.html 
+	
