@@ -6,7 +6,7 @@
 
 html {
     box-sizing: border-box;
-    font-size: 10px;
+    font-size: 20px;
     background-color: darkslategray;
 }
 *, *:before, *:after {
@@ -19,6 +19,7 @@ html {
     align-content:center;
     text-align: center;
     font-family: 'Inconsolata', monospace;
+    color: white;
   }
 
   .container {
@@ -31,31 +32,139 @@ html {
 
   .nav-bar {
     height: 8%;
+    width: 100%;
     background-color:black;
+    display:flex;
+    justify-content: flex-start;
+    border-width: 1px;;
+    border-style: solid;
+    border-color: slategrey;
+  }
+
+  .header.undo {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width :20%;
+    height: 100%;
+    border-width: 1px;;
+    border-style: solid;
+    border-color: slategrey;
+    color:darkorange;
+  }
+
+  .header.title {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    border-width: 1px;;
+    border-style: solid;
+    border-color: slategrey;
+  }
+
+  .header.menu {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    border-width: 1px;;
+    border-style: solid;
+    border-color: slategrey;
   }
 
   .history {
     height: 25%;
-    background-color:darkslategray;
+    background-color:slategray;
     border-style: solid;
-   /* border-color: slategrey;*/
     border-color: black;
-
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
   }
 
-  .input {
+  .prev {
+    color: black;
+  }
+
+  .display {
     height: 12%;
-    background-color:darkslategray;
+    width: 100%;
+    background-color:rgb(81, 96, 81);
     border-style: solid;
-   /* border-color: slategrey;*/
     border-color: black;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .content {
+    width: 100%;
+    height:auto;
+    background-color: rgb(81, 96, 81);
+    border-style: solid;
+    border-color: black;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap:wrap;
   }
 
   .buttons {
     height: 55%;
-    background-color:darkslategray;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color:slategray;
     border-style: solid;
-   /* border-color: slategrey;*/
     border-color: black;
   }
 
+  .btn-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height:100%;
+    width: 20%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    background-color:slategray;
+    margin:1px;
+  }
+
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25%;
+    width: 100% ;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    background-color:slategray;
+    margin:1px;
+  }
+
+  .btn.double {
+    height: 50%;
+    background-color: rgb(81, 96, 81);
+  }
+
+  #clr,
+  #del,#sign {
+    color:darkorange;
+    background-color: slateblue;
+  }
+
+  #divide,
+  #multiply,
+  #subtract,
+  #add, #dp {
+    background-color: steelblue;
+  }
