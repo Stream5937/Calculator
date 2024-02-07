@@ -61,6 +61,7 @@ html {
     border-width: 1px;;
     border-style: solid;
     border-color: slategrey;
+    color: white;
   }
 
   .header.menu {
@@ -71,6 +72,7 @@ html {
     border-width: 1px;;
     border-style: solid;
     border-color: slategrey;
+    color: white;
   }
 
   .history {
@@ -92,8 +94,8 @@ html {
     height: 12%;
     width: 100%;
     background-color:rgb(81, 96, 81);
-    border-style: solid;
-    border-color: black;
+   /* border-style: solid;
+    border-color: black;*/
     display:flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -104,8 +106,8 @@ html {
     width: 100%;
     height:auto;
     background-color: rgb(81, 96, 81);
-    border-style: solid;
-    border-color: black;
+   /* border-style: solid;
+    border-color: black;*/
     display:flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -167,4 +169,10 @@ html {
   #subtract,
   #add, #dp {
     background-color: steelblue;
+  }
+
+  .undo,
+  .title,
+  .menu {
+    background-color: black;
   }

@@ -1,11 +1,15 @@
 //Odin Project calculator
 
+//get dom elements
+const buttons = document.querySelectorAll('button');
+const undo = document.querySelector('.undo');           //revert
+const menu = document.querySelector('.menu');           //future menu
+const title = document.querySelector('.title');         //future change of calculator type
+
 //globals
 let first = 0;
 let second = 0;
 let operator = null;
-
-//get dom elements
 
 
 //functions
@@ -69,7 +73,58 @@ function operate ( first, second, operator){
     }
 }
 
+function btnClicked(id) {
+    console.log(`id is: ${id}`);
+    let num = NaN;
+    switch(id) {
+
+        case '0':
+        case '1':
+        case '4':
+        case '7': {
+            num = parseFloat(id);
+            console.log(`num is ${num}`);
+            break;
+        }
+
+        case 'undo':
+        case 'menu':
+        case 'title': {
+            console.log(`action header button ${id}`);
+            break;
+        }
+
+        case 'clr' :
+        case 'del':
+        case 'sign': {
+            console.log(`alter input id ${id}`);
+            break;
+        }
+
+        case 'divide':
+        case 'multiply':
+        case 'subtract':
+        case 'add':
+        case 'dp': {
+            console.log(`action operator ${id}`);
+            break;
+        }
+
+        //possibly never reached
+        console.log(`error id ${id}`);
+
+    }
+
+}
+
+
 //add event listeners
+buttons.forEach(function(button){
+    button.addEventListener('click', e => { 
+        console.log(`button: ${e.target.id}`); 
+        btnClicked(e.target.id);
+    });
+});
 
 
 
