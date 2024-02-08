@@ -7,8 +7,8 @@ const menu = document.querySelector('.menu');           //future menu
 const title = document.querySelector('.title');         //future change of calculator type
 
 //globals
-let first = 0;
-let second = 0;
+let first = null;
+let second = null;
 let operator = null;
 
 
@@ -74,16 +74,47 @@ function operate ( first, second, operator){
 }
 
 function btnClicked(id) {
-    console.log(`id is: ${id}`);
+    console.log(`at btnClicked() id is: ${id}`);
     let num = NaN;
+    let test;
     switch(id) {
-
         case '0':
         case '1':
+        case '2':
+        case '3':
         case '4':
-        case '7': {
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9': {
             num = parseFloat(id);
             console.log(`num is ${num}`);
+            console.log(`->first: ${first}, second: ${second}.`);
+            //for test
+            //test=1;
+            //first=null; second = null;
+            //test=2;
+            //first = 10; second = null;
+            //test=3;
+            //first = 10; second = 20;
+            //console.log(`pretest: ${test}, first: ${first}, second: ${second}.`);
+            if(!(second === null) && !(first === null)){
+                console.log("Display input error");
+            }
+            if(second == null && first == null) {
+                first = num;
+                console.log(`test: ${test}, first: ${first}, second: ${second}.`);
+            }else{
+               // console.log(`at else`);
+               // console.log(`at-else-test: ${test}, first: ${first}, second: ${second}.`);
+               // let type = typeof first;
+               // console.log(`type of first ${type}`)
+                if((second === null) && !(first === null)) {
+                    second = num;
+                    console.log(`-test: ${test}, first: ${first}, second: ${second}.`);
+                }
+            }
             break;
         }
 
