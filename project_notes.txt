@@ -5,5 +5,41 @@ so my workaround:
 	this just opens directly a new pop-up browser window calc.html 
 	to my desired size at my desired screen coords
 	then promptly shuts its self down so is not seen.
-	All action then resolves around calc.html 
+	All action then resolves around calc.html
+	 
+Handle input basic work flow:-
+
+function btnClicked(id){} react to buttons and segregate to:-
+	//handle numeric input
+	//handle header buttons			IMPLEMENT LATER IF EVER
+	//handle input moderation		//clr del and sign
+	//handle maths operations
 	
+//handle numeric input
+	determine basic flow as 	enter a number ensuring it is first number
+					  restrict to max value?	-> relationship to max val of output?
+					  permit decimal point
+					  ensure max 1 decimal point ?
+					  ensure max 1 decimal place ?
+					  permit sign change
+					  permit delete & repeat as first number
+					ensure next is an operator 
+					if operator demands second number
+					enter a number ensuring it is second number
+					  restrict to max value?	-> relationship to max val of output?
+					  ensure max 1 decimal point ?
+					  ensure max 1 decimal place ?
+					  permit sign change
+					  permit delete & repeat as second number
+					based on operator call appropriate function
+
+isolated functions 
+	clear input values
+	clear input display
+	clear history values
+	clear history display
+	copy valid inputs to history
+	set up local storage for history and undo functions
+	
+					  
+							
