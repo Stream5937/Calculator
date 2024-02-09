@@ -12,7 +12,11 @@ const history = document.querySelectorAll('.prev');
 let first = null;
 let second = null;
 let operator = null;
-
+let keysEntered = '';       //empty string to store seqence of keyed entries used to build values
+let valuesEntered = [];     //empty array to store possible three entered values [first, operator, second]
+let numLength = 0;          //to enable check the entered num value no longer than content display length
+let decimal = false;        // no decimal yet
+let lastValueWasOperator = false;   
 
 //****** dev only ******
 const CLEARSTORAGE = false;
@@ -77,35 +81,41 @@ function clearStorage() {
     localStorage.clear();
 }
 
+//validate floating point numeric input
 function validateInput(input){
     num = input;
     let test;
     console.log(`num is ${num}`);
-            console.log(`->first: ${first}, second: ${second}.`);
-            //for test
-            //test=1;
-            //first=null; second = null;
-            //test=2;
-            //first = 10; second = null;
-            //test=3;
-            //first = 10; second = 20;
-            //console.log(`pretest: ${test}, first: ${first}, second: ${second}.`);
-            if(!(second === null) && !(first === null)){
-                console.log("Display input error");
-            }
-            if(second == null && first == null) {
-                first = num;
-                console.log(`test: ${test}, first: ${first}, second: ${second}.`);
-            }else{
-               // console.log(`at else`);
-               // console.log(`at-else-test: ${test}, first: ${first}, second: ${second}.`);
-               // let type = typeof first;
-               // console.log(`type of first ${type}`)
-                if((second === null) && !(first === null)) {
-                    second = num;
-                    console.log(`-test: ${test}, first: ${first}, second: ${second}.`);
-                }
-            }
+    console.log(`->first: ${first}, second: ${second}.`);
+    //for test
+    //test=1;
+    //first=null; second = null;
+    //test=2;
+    //first = 10; second = null;
+    //test=3;
+    //first = 10; second = 20;
+    //console.log(`pretest: ${test}, first: ${first}, second: ${second}.`);
+    if(!(second === null) && !(first === null)){
+        console.log("Display input error");
+        content.textContent='Input Error';
+    }
+    if(second == null && first == null) {
+        first = num;
+        valuesEntered.push(first);
+        console.log(`test: ${test}, first: ${first}, second: ${second}.`);
+    }else{
+        // console.log(`at else`);
+        // console.log(`at-else-test: ${test}, first: ${first}, second: ${second}.`);
+        // let type = typeof first;
+        // console.log(`type of first ${type}`)
+        if((second === null) && !(first === null)) {
+            second = num;
+            valuesEntered.push(second);
+            console.log(`-test: ${test}, first: ${first}, second: ${second}.`);
+            content.textContent ='';
+            content.textContent = valuesEntered.toString();
+        }
+    }
 
 }
 
@@ -178,8 +188,12 @@ function btnClicked(id) {
         case '7':
         case '8':
         case '9': {
-            num = parseFloat(id);
-            validateInput(num);
+            num = parseInt(id);
+            keysEntered += num;
+            console.log(keysEntered);
+            content.textContent= '';
+            content.textContent= keysEntered;
+            //validateInput(num);
             break;
         }
 
@@ -198,6 +212,23 @@ function btnClicked(id) {
         case 'sign':            //change input sign
         {
             console.log(`alter input id ${id}`);
+            modifyInput(id);
+            break;
+        }
+
+        //handle decimal point
+        case'dp': {
+            console.log(`decimal point ${id}`);
+            //check no dp already
+            //if(! keysEntered.includes('.')){
+            if(!decimal){
+                //flag decimal true
+                decimal = true;
+                keysEntered += '.';
+                //log the length of keysEntered string including dp
+                //for later check value no more than content display width
+                numLength = keysEntered.length;
+            }
             break;
         }
 
@@ -205,9 +236,20 @@ function btnClicked(id) {
         case 'divide':          //implement math functions
         case 'multiply':
         case 'subtract':
-        case 'add':
-        case 'dp': {
+        case 'add':{
             console.log(`action operator ${id}`);
+            //operator indicates end of first input
+            //so save first input number value
+            validateInput(parseFloat(keysEntered));
+           ///// valuesEntered.push(keysEntered);
+            //empty the keysEntered string ready for second number value
+            keysEntered = '';
+            //store the operator
+            valuesEntered.push(id);
+            //log it
+            lastValueWasOperator = true;
+            content.textContent ='';
+            content.textContent = valuesEntered.toString();
             break;
         }
 
@@ -216,6 +258,54 @@ function btnClicked(id) {
 
     }
 
+}
+
+//modify input
+function modifyInput(id){
+    let revStr='';
+    switch(id){
+        case 'clr': {
+            console.log('clr');
+            content.textContent='';
+            keysEntered = '';
+            valuesEntered = [];
+            numLength = 0;
+            decimal = false;
+            lastValueWasOperator=false;
+            break;
+        }
+        case 'del': {
+            console.log('del');
+            if(lastValueWasOperator){
+                lastValueWasOperator = false;
+                valuesEntered[1]='';
+            }else{
+                revStr = keysEntered.slice(0,keysEntered.length-1);
+                keysEntered = '';
+                console.log('@.. ' + keysEntered);
+                keysEntered = revStr;
+                content.textContent= '';
+                //setTimeout(()=>{}, 5000);
+                console.log('#.. ' + keysEntered);
+                content.textContent= keysEntered;
+            }
+            break;
+        }
+        case 'sign':{
+            let currentSign = keysEntered.slice(0,1);
+            console.log(keysEntered, currentSign);
+            if(currentSign === '-'){
+                revStr=keysEntered.replace('-','+');
+                keysEntered ='';
+                keysEntered= revStr;
+                console.log(keysEntered);
+            }else{
+                keysEntered = '-'+ keysEntered;
+                console.log(keysEntered);
+            }
+            break;
+        }
+    }
 }
 
 
@@ -231,3 +321,6 @@ buttons.forEach(function(button){
 
 //run code
 noflow();
+
+
+//test code
