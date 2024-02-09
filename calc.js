@@ -16,7 +16,8 @@ let keysEntered = '';       //empty string to store seqence of keyed entries use
 let valuesEntered = [];     //empty array to store possible three entered values [first, operator, second]
 let numLength = 0;          //to enable check the entered num value no longer than content display length
 let decimal = false;        // no decimal yet
-let lastValueWasOperator = false;   
+let lastValueWasOperator = false;
+let result = 0;
 
 //****** dev only ******
 const CLEARSTORAGE = false;
@@ -46,7 +47,7 @@ function clearHistoryDisplay() {
   });
 }
 
-//operate local storage of 'items' 
+//action local storage of 'items' 
 //initialise storage for array of items
 function initialiseLocalStorage(items){
     //initialise to empty array or collect initial 'items' from local storage array
@@ -103,6 +104,8 @@ function validateInput(input){
         first = num;
         valuesEntered.push(first);
         console.log(`test: ${test}, first: ${first}, second: ${second}.`);
+        content.textContent ='';
+        content.textContent = valuesEntered[0].toString();
     }else{
         // console.log(`at else`);
         // console.log(`at-else-test: ${test}, first: ${first}, second: ${second}.`);
@@ -112,8 +115,9 @@ function validateInput(input){
             second = num;
             valuesEntered.push(second);
             console.log(`-test: ${test}, first: ${first}, second: ${second}.`);
+            console.log(`values: ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]}`);
             content.textContent ='';
-            content.textContent = valuesEntered.toString();
+            content.textContent = valuesEntered[0].toString()+' '+valuesEntered[1].toString()+' '+valuesEntered[2].toString();
         }
     }
 
@@ -144,9 +148,10 @@ function divide (a, b) {
 }
 
 //apply the selected operator to first and second numbers
-function operate ( first, second, operator){
+function operate ( firstVal, operator, secondVal){
+    console.log(`operate on ${firstVal}, ${operator}, ${secondVal}`);
     //const operators = ['bracket', 'order', 'divide', 'multiply', 'add', 'subtract'];
-    const result = NaN;
+    const result = null;
     //if(operators.indexOf(operator,0)){}
     switch(operator){
         case 'bracket':{
@@ -157,17 +162,21 @@ function operate ( first, second, operator){
             console.log("error - no implementation of order");
             return result;
         }
-        case 'divide':{
-            return divide(first,second);
+        case '/':{
+            console.log('dividing');
+            return divide(firstVal,secondVal);
         }
-        case 'multiply':{
-            return multiply(first, second);
+        case '*':{
+            console.log('multiplying');
+            return multiply(firstVal, secondVal);
         }
-        case 'add':{
-            return add(first, second);
+        case '+':{
+            console.log('adding');
+            return add(firstVal, secondVal);
         }
-        case 'subtract':{
-            return subtract(first,second);
+        case '-':{
+            console.log('subtracting');
+            return subtract(firstVal,secondVal);
         }
     }
 }
@@ -191,8 +200,13 @@ function btnClicked(id) {
             num = parseInt(id);
             keysEntered += num;
             console.log(keysEntered);
-            content.textContent= '';
-            content.textContent= keysEntered;
+            console.log(`last was operator ${lastValueWasOperator}`);
+            if(lastValueWasOperator){
+                validateInput(parseFloat(keysEntered));
+            }else{
+                content.textContent= '';
+                content.textContent= keysEntered;
+            }
             //validateInput(num);
             break;
         }
@@ -232,15 +246,17 @@ function btnClicked(id) {
             break;
         }
 
-        //handle maths operations
-        case 'divide':          //implement math functions
-        case 'multiply':
-        case 'subtract':
-        case 'add':{
+        //handle maths operations   (changed now just symbols 09/02/24)
+        case '/':          //implement math functions
+        case '*':
+        case '-':
+        case '+':{
             console.log(`action operator ${id}`);
             //operator indicates end of first input
-            //so save first input number value
-            validateInput(parseFloat(keysEntered));
+            if(first === null){
+                //so save first input number value
+                validateInput(parseFloat(keysEntered));
+            }
            ///// valuesEntered.push(keysEntered);
             //empty the keysEntered string ready for second number value
             keysEntered = '';
@@ -249,11 +265,18 @@ function btnClicked(id) {
             //log it
             lastValueWasOperator = true;
             content.textContent ='';
-            content.textContent = valuesEntered.toString();
+            content.textContent = valuesEntered[0].toString()+' '+valuesEntered[1].toString();
             break;
         }
 
-        //possibly never reached
+        case '=': {
+            obtainResult();
+            //console.log('#.. = ${result}');
+            //content.textContent=result;
+            break;
+        }
+
+        //error possibly never reached
         console.log(`error id ${id}`);
 
     }
@@ -272,6 +295,10 @@ function modifyInput(id){
             numLength = 0;
             decimal = false;
             lastValueWasOperator=false;
+            first = null;
+            second = null;
+            operator = null;
+            result = 0;
             break;
         }
         case 'del': {
@@ -306,6 +333,32 @@ function modifyInput(id){
             break;
         }
     }
+}
+
+function obtainResult() {
+    console.log(`result : ${result}`);
+    console.log(`operate( ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]})`);
+    console.log(typeof valuesEntered[0]);
+    console.log(typeof valuesEntered[1]);
+    console.log(typeof valuesEntered[2]);
+    result =  operate(valuesEntered[0], valuesEntered[1], valuesEntered[2]);
+    console.log(`result : ${result}`);
+    content.textContent=result;
+    resetValues();
+}
+
+function resetValues(){
+    //content.textContent='';
+    keysEntered = '';
+    valuesEntered = [];
+    numLength = 0;
+    decimal = false;
+    lastValueWasOperator=false;
+    first = result;
+    valuesEntered.push(first);
+    second = null;
+    operator = null;
+    result = 0;
 }
 
 
