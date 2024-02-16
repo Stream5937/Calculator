@@ -98,8 +98,10 @@ html {
     border-color: black;*/
     display:flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    /*text-align: right;*/
   }
 
   .content {
@@ -110,9 +112,11 @@ html {
     border-color: black;*/
     display:flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: flex-end;
+    align-items: flex-end;
     flex-wrap:wrap;
+    font-size:40px;
+    color:chartreuse;
   }
 
   .buttons {

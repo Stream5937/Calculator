@@ -18,6 +18,7 @@ let numLength = 0;          //to enable check the entered num value no longer th
 let decimal = false;        // no decimal yet
 let lastValueWasOperator = false;
 let result = 0;
+let historicEntries = [``,``,``,``]; // array of empty strings
 
 //****** dev only ******
 const CLEARSTORAGE = false;
@@ -46,6 +47,31 @@ function clearHistoryDisplay() {
     prev.textContent='';
   });
 }
+
+function updateHistories(){
+    let count = 3;
+    for(count; count < 0; count--){
+        if(count> 0){
+            historicEntries[count] = historicEntries[count-1];
+        }
+        if(count == 0){
+            historicEntries[count] = historicEntries[count+3];
+        }
+    }
+}
+
+//show the history display
+function showHistory() {
+    clearHistoryDisplay();
+    let count = 0;
+    history.forEach(prev => {
+    prev.textContent = historicEntries[count++] ; 
+    console.log(prev.textContent);
+    prev.textContent='';
+  });
+  updateHistories();
+}
+
 
 //action local storage of 'items' 
 //initialise storage for array of items
@@ -96,16 +122,21 @@ function validateInput(input){
     //test=3;
     //first = 10; second = 20;
     //console.log(`pretest: ${test}, first: ${first}, second: ${second}.`);
+    /*
     if(!(second === null) && !(first === null)){
         console.log("Display input error");
         content.textContent='Input Error';
     }
+    */
     if(second == null && first == null) {
         first = num;
         valuesEntered.push(first);
         console.log(`test: ${test}, first: ${first}, second: ${second}.`);
-        content.textContent ='';
-        content.textContent = valuesEntered[0].toString();
+        //content.textContent ='';
+        //content.textContent = valuesEntered[0].toString();
+        setContent(valuesEntered[0].toString());
+        //reset decimal flag
+        decimal = false;
     }else{
         // console.log(`at else`);
         // console.log(`at-else-test: ${test}, first: ${first}, second: ${second}.`);
@@ -116,8 +147,11 @@ function validateInput(input){
             valuesEntered.push(second);
             console.log(`-test: ${test}, first: ${first}, second: ${second}.`);
             console.log(`values: ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]}`);
-            content.textContent ='';
-            content.textContent = valuesEntered[0].toString()+' '+valuesEntered[1].toString()+' '+valuesEntered[2].toString();
+            //content.textContent ='';
+            //content.textContent = valuesEntered[0].toString()+' '+valuesEntered[1].toString()+' '+valuesEntered[2].toString();
+            setContent(valuesEntered[0].toString()+' '+valuesEntered[1].toString()+' '+valuesEntered[2].toString());
+            //reset decimal flag
+            decimal = false;
         }
     }
 
@@ -164,14 +198,30 @@ function operate ( firstVal, operator, secondVal){
         }
         case '/':{
             console.log('dividing');
-            return divide(firstVal,secondVal);
+            /*
+            if(secondVal === 0) {
+                content.textContent="Division by zero error!";
+                console.log('***division by zero***');
+            }
+            */
+            if(secondVal === 0) {
+               //my delay
+               for(let i =0; i< 100; i++){
+                for(let j=0; j<100;j++){
+                    console.log("inner timer");
+                }
+               }
+               return firstVal;
+            }else{
+                return divide(firstVal,secondVal);
+            }
         }
         case '*':{
             console.log('multiplying');
             return multiply(firstVal, secondVal);
         }
         case '+':{
-            console.log('adding');
+            console.log(`adding ${first}, ${second}`);
             return add(firstVal, secondVal);
         }
         case '-':{
@@ -199,14 +249,32 @@ function btnClicked(id) {
         case '9': {
             num = parseInt(id);
             keysEntered += num;
-            console.log(keysEntered);
+            console.log(`236- keysEntered= ${keysEntered}`);
             console.log(`last was operator ${lastValueWasOperator}`);
-            if(lastValueWasOperator){
-                validateInput(parseFloat(keysEntered));
+           if(lastValueWasOperator){
+               // content.textContent= '';
+                //content.textContent= `${valuesEntered[0]} ${valuesEntered[1]} ${keysEntered}`;
+                setContent(`${valuesEntered[0]} ${valuesEntered[1]} ${keysEntered}`);
             }else{
-                content.textContent= '';
-                content.textContent= keysEntered;
-            }
+                console.log(`236- valuesEntered[0] = ${valuesEntered[0]}`);
+                if(valuesEntered[0]== undefined){
+                    console.log("238- at a");
+                   // content.textContent= '';
+                    //content.textContent= keysEntered;
+                    setContent(keysEntered);
+                }else{
+                    console.log("242-at b");
+                    //remember key just entered
+                    let temp = keysEntered;
+                    //clear everything and restart
+                    modifyInput('clr');
+                    //reinstate just entered key
+                    keysEntered = temp;
+                   // content.textContent= '';
+                    //content.textContent= keysEntered; 
+                    setContent(keysEntered); 
+                }
+           }
             //validateInput(num);
             break;
         }
@@ -238,10 +306,19 @@ function btnClicked(id) {
             if(!decimal){
                 //flag decimal true
                 decimal = true;
-                keysEntered += '.';
+                keysEntered = keysEntered+'.';
+                console.log(`keysEntered`);
                 //log the length of keysEntered string including dp
                 //for later check value no more than content display width
                 numLength = keysEntered.length;
+                //content.textContent = keysEntered;
+                if(lastValueWasOperator){
+                    //must be second value
+                    setContent(`${valuesEntered[0].toString()} ${valuesEntered[1].toString()} ${keysEntered}`);
+                }else{
+                    //must be first value
+                    setContent(keysEntered);
+                }
             }
             break;
         }
@@ -264,15 +341,33 @@ function btnClicked(id) {
             valuesEntered.push(id);
             //log it
             lastValueWasOperator = true;
-            content.textContent ='';
-            content.textContent = valuesEntered[0].toString()+' '+valuesEntered[1].toString();
+            if((id === '/') && (valuesEntered[2] === 0) ){setContent('#Division by zero error#');}
+            else{
+                setContent(valuesEntered[0].toString()+' '+valuesEntered[1].toString());
+            }
             break;
         }
 
         case '=': {
-            obtainResult();
-            //console.log('#.. = ${result}');
-            //content.textContent=result;
+            //store the last value
+            valuesEntered.push(parseFloat(keysEntered));
+            //reset decimal flag
+            decimal = false;
+            //display expression
+            //content.textContent ='';
+            //content.textContent = valuesEntered[0].toString()+' '+valuesEntered[1].toString()+' '+valuesEntered[2].toString();
+            //check for division by zero error
+            if((valuesEntered[1] === '/') && (valuesEntered[2] === 0 )){
+                setContent('Division by zero error!');
+                valuesEntered[2] = null;
+            }else{
+                validateInput(parseFloat(keysEntered));
+                obtainResult();
+                //cancel previous
+                lastValueWasOperator = false;
+                console.log('#.. = ${result}');
+                //content.textContent=result;
+            }
             break;
         }
 
@@ -292,6 +387,7 @@ function modifyInput(id){
             content.textContent='';
             keysEntered = '';
             valuesEntered = [];
+            console.log(`342- ${valuesEntered[0]}`);
             numLength = 0;
             decimal = false;
             lastValueWasOperator=false;
@@ -311,14 +407,18 @@ function modifyInput(id){
                 keysEntered = '';
                 console.log('@.. ' + keysEntered);
                 keysEntered = revStr;
-                content.textContent= '';
+                //content.textContent= '';
                 //setTimeout(()=>{}, 5000);
                 console.log('#.. ' + keysEntered);
-                content.textContent= keysEntered;
+                //content.textContent= keysEntered;
+                setContent(keysEntered);
             }
             break;
         }
         case 'sign':{
+            //are we changing first or second value
+           // console.log(`first is ${first} second is ${second} !`);
+            //console.log(second.toString());
             let currentSign = keysEntered.slice(0,1);
             console.log(keysEntered, currentSign);
             if(currentSign === '-'){
@@ -329,6 +429,35 @@ function modifyInput(id){
             }else{
                 keysEntered = '-'+ keysEntered;
                 console.log(keysEntered);
+                //content.textContent = keysEntered;
+            }
+            if(first === null){
+                //content.textContent = keysEntered;
+                setContent(keysEntered);
+            }
+            //reusing calculated value as first
+            console.log(`first is ${first} operator is ${operator}`);
+            if(!(first === null)){console.log(`first has value ${first}`);}
+            if(operator === null){console.log(`396-operator ${operator} is null`);}
+            else{
+                console.log(`398- operator is ${operator} `);
+            }
+            if((!(first === null))&&(operator === null)){
+                console.log('395-'+ valuesEntered[0]);
+                valuesEntered[0]= valuesEntered[0]*-1;  // + -> - or - -> +
+                //content.textContent = valuesEntered[0].toString(); 
+                setContent(valuesEntered[0].toString());
+                console.log('397-' + valuesEntered[0]);
+            }else{
+                const temp0 = valuesEntered[0].toString();
+                if(!valuesEntered[1]=== null){
+                    const temp1 = valuesEntered[1].toString();
+                    //content.textContent = `${temp0} ${temp1} ${keysEntered}`;
+                    setContent(`${temp0} ${temp1} ${keysEntered}`);
+                }else{
+                    //content.textContent = `error at 411`;
+                    setContent(`error at 411`);
+                }
             }
             break;
         }
@@ -336,14 +465,28 @@ function modifyInput(id){
 }
 
 function obtainResult() {
-    console.log(`result : ${result}`);
+    console.log(`381-result : ${result}`);
     console.log(`operate( ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]})`);
     console.log(typeof valuesEntered[0]);
     console.log(typeof valuesEntered[1]);
     console.log(typeof valuesEntered[2]);
     result =  operate(valuesEntered[0], valuesEntered[1], valuesEntered[2]);
-    console.log(`result : ${result}`);
-    content.textContent=result;
+    console.log(`444- result = ${result}` );
+    //avoid rounding errors to many dec places
+    result = parseFloat(result.toFixed(6)); //6 dec places
+    console.log(`447- result = ${result}` );
+    const resultObj = {
+        'result' : result,
+        'first' : valuesEntered[0],
+        'operator': valuesEntered[1],
+        'second': valuesEntered[2]
+    }
+    historicEntries.push(resultObj);
+    console.log(`451-result : ${result}`);
+    console.log(`452-from: ${resultObj.first} ${resultObj.operator} ${resultObj.second}`);
+    //content.textContent=result;
+    setContent(result.toString());
+    showHistory();
     resetValues();
 }
 
@@ -359,6 +502,17 @@ function resetValues(){
     second = null;
     operator = null;
     result = 0;
+}
+
+function setContent(text){
+    console.log('at setContent($$ '+text+' $$)');
+    if(text.length > 16){
+        content.style.fontSize= '20px';
+    }else{
+        content.style.fontSize= '40px';
+    }
+    content.textContent = text;
+    console.log('post setContent($$ '+text+' $$)');
 }
 
 

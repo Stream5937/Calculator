@@ -41,5 +41,19 @@ isolated functions
 	copy valid inputs to history
 	set up local storage for history and undo functions
 	
+////////////   ISSUES   //////////////
+issues with content display, sign and decimals plus history display
+make font smaller when display area exceeded -> ok done
+deal with calculation overflow issue -> ok done
+set content display right justified? -> ok done
+display of first disappears when second sign changed -> ok Done
+clear content display if another number entered after result before an operator -> ok Done
+display decimal point as entered not wait for next number-> OK Done
+error in allowing two numbers entered without operator
+division by zero error
+
+
+
+	
 					  
 							
