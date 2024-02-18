@@ -18,7 +18,15 @@ let numLength = 0;          //to enable check the entered num value no longer th
 let decimal = false;        // no decimal yet
 let lastValueWasOperator = false;
 let result = 0;
-let historicEntries = [``,``,``,``]; // array of empty strings
+let historicEntries = []; // empty array for result objects objects
+/*nb historic entry from result obj
+const resultObj = {
+        'result' : result,
+        'first' : valuesEntered[0],
+        'operator': valuesEntered[1],
+        'second': valuesEntered[2]
+    }
+*/
 
 //****** dev only ******
 const CLEARSTORAGE = false;
@@ -47,7 +55,7 @@ function clearHistoryDisplay() {
     prev.textContent='';
   });
 }
-
+/*
 function updateHistories(){
     let count = 3;
     for(count; count < 0; count--){
@@ -55,21 +63,30 @@ function updateHistories(){
             historicEntries[count] = historicEntries[count-1];
         }
         if(count == 0){
+            historicEntries[count] = null;
+        }
+       */ /*
+        if(count == 0){
             historicEntries[count] = historicEntries[count+3];
         }
+        *//*
     }
 }
-
+*/
 //show the history display
 function showHistory() {
     clearHistoryDisplay();
-    let count = 0;
+    let count = historicEntries.length - 4;
+    if(count < 0){count = 0;}
+    let currentEntry;
     history.forEach(prev => {
-    prev.textContent = historicEntries[count++] ; 
-    console.log(prev.textContent);
-    prev.textContent='';
+        if(count < historicEntries.length){
+            currentEntry = historicEntries[count++] ;
+            prev.textContent = `${currentEntry.first} ${currentEntry.operator} ${currentEntry.second} = ${currentEntry.result} ` ; 
+            console.log(prev.textContent);
+        }
   });
-  updateHistories();
+  //updateHistories();
 }
 
 
@@ -112,8 +129,8 @@ function clearStorage() {
 function validateInput(input){
     num = input;
     let test;
-    console.log(`num is ${num}`);
-    console.log(`->first: ${first}, second: ${second}.`);
+    //console.log(`num is ${num}`);
+    //console.log(`->first: ${first}, second: ${second}.`);
     //for test
     //test=1;
     //first=null; second = null;
@@ -131,7 +148,7 @@ function validateInput(input){
     if(second == null && first == null) {
         first = num;
         valuesEntered.push(first);
-        console.log(`test: ${test}, first: ${first}, second: ${second}.`);
+        //console.log(`test: ${test}, first: ${first}, second: ${second}.`);
         //content.textContent ='';
         //content.textContent = valuesEntered[0].toString();
         setContent(valuesEntered[0].toString());
@@ -145,8 +162,8 @@ function validateInput(input){
         if((second === null) && !(first === null)) {
             second = num;
             valuesEntered.push(second);
-            console.log(`-test: ${test}, first: ${first}, second: ${second}.`);
-            console.log(`values: ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]}`);
+           // console.log(`-test: ${test}, first: ${first}, second: ${second}.`);
+           // console.log(`values: ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]}`);
             //content.textContent ='';
             //content.textContent = valuesEntered[0].toString()+' '+valuesEntered[1].toString()+' '+valuesEntered[2].toString();
             setContent(valuesEntered[0].toString()+' '+valuesEntered[1].toString()+' '+valuesEntered[2].toString());
@@ -159,31 +176,31 @@ function validateInput(input){
 
 //add two numbers and return result
 function add (a, b) {
-    console.log(a + b)
+   // console.log(a + b)
     return a + b;
 }
 
 //subtract two numbers and return result
 function subtract (a, b) {
-    console.log(a - b)
+   // console.log(a - b)
     return a - b;
 }
 
 //multiply two numbers and return result
 function multiply (a, b) {
-    console.log(a * b)
+   // console.log(a * b)
     return a * b;
 }
 
 //divide two numbers and return result
 function divide (a, b) {
-    console.log(a / b)
+    //console.log(a / b)
     return (a / b);
 }
 
 //apply the selected operator to first and second numbers
 function operate ( firstVal, operator, secondVal){
-    console.log(`operate on ${firstVal}, ${operator}, ${secondVal}`);
+   // console.log(`operate on ${firstVal}, ${operator}, ${secondVal}`);
     //const operators = ['bracket', 'order', 'divide', 'multiply', 'add', 'subtract'];
     const result = null;
     //if(operators.indexOf(operator,0)){}
@@ -197,7 +214,7 @@ function operate ( firstVal, operator, secondVal){
             return result;
         }
         case '/':{
-            console.log('dividing');
+           // console.log('dividing');
             /*
             if(secondVal === 0) {
                 content.textContent="Division by zero error!";
@@ -205,34 +222,36 @@ function operate ( firstVal, operator, secondVal){
             }
             */
             if(secondVal === 0) {
+                /*
                //my delay
                for(let i =0; i< 100; i++){
                 for(let j=0; j<100;j++){
                     console.log("inner timer");
                 }
                }
+               */
                return firstVal;
             }else{
                 return divide(firstVal,secondVal);
             }
         }
         case '*':{
-            console.log('multiplying');
+            //console.log('multiplying');
             return multiply(firstVal, secondVal);
         }
         case '+':{
-            console.log(`adding ${first}, ${second}`);
+            //console.log(`adding ${first}, ${second}`);
             return add(firstVal, secondVal);
         }
         case '-':{
-            console.log('subtracting');
+            //console.log('subtracting');
             return subtract(firstVal,secondVal);
         }
     }
 }
 
 function btnClicked(id) {
-    console.log(`at btnClicked() id is: ${id}`);
+    //console.log(`at btnClicked() id is: ${id}`);
     let num = null;
     
     switch(id) {
@@ -249,25 +268,37 @@ function btnClicked(id) {
         case '9': {
             num = parseInt(id);
             keysEntered += num;
-            console.log(`236- keysEntered= ${keysEntered}`);
-            console.log(`last was operator ${lastValueWasOperator}`);
+            //console.log(`236- keysEntered= ${keysEntered}`);
+            //console.log(`last was operator ${lastValueWasOperator}`);
            if(lastValueWasOperator){
                // content.textContent= '';
                 //content.textContent= `${valuesEntered[0]} ${valuesEntered[1]} ${keysEntered}`;
                 setContent(`${valuesEntered[0]} ${valuesEntered[1]} ${keysEntered}`);
             }else{
-                console.log(`236- valuesEntered[0] = ${valuesEntered[0]}`);
+               // console.log(`236- valuesEntered[0] = ${valuesEntered[0]}`);
                 if(valuesEntered[0]== undefined){
-                    console.log("238- at a");
+                    //console.log("238- at a");
                    // content.textContent= '';
                     //content.textContent= keysEntered;
                     setContent(keysEntered);
                 }else{
-                    console.log("242-at b");
+                    //console.log("242-at b");
                     //remember key just entered
                     let temp = keysEntered;
-                    //clear everything and restart
-                    modifyInput('clr');
+                    //clear everything but history and restart
+                    //modifyInput('clr');
+                    console.log('clr all but except history' );
+                    content.textContent='';
+                    keysEntered = '';
+                    valuesEntered = [];
+                    //console.log(`342- ${valuesEntered[0]}`);
+                    numLength = 0;
+                    decimal = false;
+                    lastValueWasOperator=false;
+                    first = null;
+                    second = null;
+                    operator = null;
+                    result = 0;
                     //reinstate just entered key
                     keysEntered = temp;
                    // content.textContent= '';
@@ -293,21 +324,21 @@ function btnClicked(id) {
         case 'del':             //delete last input
         case 'sign':            //change input sign
         {
-            console.log(`alter input id ${id}`);
+           // console.log(`alter input id ${id}`);
             modifyInput(id);
             break;
         }
 
         //handle decimal point
         case'dp': {
-            console.log(`decimal point ${id}`);
+            //console.log(`decimal point ${id}`);
             //check no dp already
             //if(! keysEntered.includes('.')){
             if(!decimal){
                 //flag decimal true
                 decimal = true;
                 keysEntered = keysEntered+'.';
-                console.log(`keysEntered`);
+                //console.log(`keysEntered`);
                 //log the length of keysEntered string including dp
                 //for later check value no more than content display width
                 numLength = keysEntered.length;
@@ -328,24 +359,32 @@ function btnClicked(id) {
         case '*':
         case '-':
         case '+':{
-            console.log(`action operator ${id}`);
-            //operator indicates end of first input
-            if(first === null){
-                //so save first input number value
-                validateInput(parseFloat(keysEntered));
+            //don't accept another if altready entered an operator
+            if(lastValueWasOperator ){ 
+                //then just complete by reset of id -> equals  
+                id = '=';
+            }else{
+                //console.log(`action operator ${id}`);
+                //operator indicates end of first input
+                if(first === null){
+                    //so save first input number value
+                    validateInput(parseFloat(keysEntered));
+                }
+                // valuesEntered.push(keysEntered);
+                //empty the keysEntered string ready for second number value
+                keysEntered = '';
+                //store the operator
+                valuesEntered.push(id);
+                operator = id;
+                //log it
+                lastValueWasOperator = true;
+                if((id === '/') && (valuesEntered[2] === 0) ){setContent('#Division by zero error#');}
+                else{
+                    setContent(valuesEntered[0].toString()+' '+valuesEntered[1].toString());
+                }
+                break;
             }
-           ///// valuesEntered.push(keysEntered);
-            //empty the keysEntered string ready for second number value
-            keysEntered = '';
-            //store the operator
-            valuesEntered.push(id);
-            //log it
-            lastValueWasOperator = true;
-            if((id === '/') && (valuesEntered[2] === 0) ){setContent('#Division by zero error#');}
-            else{
-                setContent(valuesEntered[0].toString()+' '+valuesEntered[1].toString());
-            }
-            break;
+            
         }
 
         case '=': {
@@ -365,7 +404,7 @@ function btnClicked(id) {
                 obtainResult();
                 //cancel previous
                 lastValueWasOperator = false;
-                console.log('#.. = ${result}');
+                //console.log('#.. = ${result}');
                 //content.textContent=result;
             }
             break;
@@ -387,7 +426,7 @@ function modifyInput(id){
             content.textContent='';
             keysEntered = '';
             valuesEntered = [];
-            console.log(`342- ${valuesEntered[0]}`);
+            //console.log(`342- ${valuesEntered[0]}`);
             numLength = 0;
             decimal = false;
             lastValueWasOperator=false;
@@ -395,21 +434,26 @@ function modifyInput(id){
             second = null;
             operator = null;
             result = 0;
+            clearHistoryDisplay();
+           // historicEntries.length = 0;
             break;
         }
         case 'del': {
-            console.log('del');
+           // console.log('del');
             if(lastValueWasOperator){
                 lastValueWasOperator = false;
                 valuesEntered[1]='';
             }else{
                 revStr = keysEntered.slice(0,keysEntered.length-1);
+                console.log(`revStr = ${revStr}`);
+                //check if just deleted decimal point and reset
+                if( keysEntered.includes('.') && (!(revStr.includes('.'))) ){decimal = false;}
                 keysEntered = '';
-                console.log('@.. ' + keysEntered);
+                //console.log('@.. ' + keysEntered);
                 keysEntered = revStr;
                 //content.textContent= '';
                 //setTimeout(()=>{}, 5000);
-                console.log('#.. ' + keysEntered);
+                console.log('keysEntered now = ' + keysEntered);
                 //content.textContent= keysEntered;
                 setContent(keysEntered);
             }
@@ -417,59 +461,78 @@ function modifyInput(id){
         }
         case 'sign':{
             //are we changing first or second value
-           // console.log(`first is ${first} second is ${second} !`);
+            console.log(`445 - first is ${first} second is ${second} !`);
             //console.log(second.toString());
             let currentSign = keysEntered.slice(0,1);
-            console.log(keysEntered, currentSign);
+            console.log('448' + keysEntered +', '+ currentSign);
             if(currentSign === '-'){
                 revStr=keysEntered.replace('-','+');
                 keysEntered ='';
                 keysEntered= revStr;
-                console.log(keysEntered);
+                console.log('453- '+keysEntered);
             }else{
                 keysEntered = '-'+ keysEntered;
-                console.log(keysEntered);
-                //content.textContent = keysEntered;
+                console.log('456- ' + keysEntered);
+                content.textContent = keysEntered;
             }
             if(first === null){
+                console.log('460- first = null');
                 //content.textContent = keysEntered;
                 setContent(keysEntered);
             }
             //reusing calculated value as first
-            console.log(`first is ${first} operator is ${operator}`);
-            if(!(first === null)){console.log(`first has value ${first}`);}
-            if(operator === null){console.log(`396-operator ${operator} is null`);}
-            else{
-                console.log(`398- operator is ${operator} `);
+            //console.log(`first is ${first} operator is ${operator}`);
+            
+            if(!(first === null)){console.log(`467- first has value ${first}`);}
+            else{/*
+                console.log('469-'+ keysEntered);
+                console.log('470-'+ keysEntered);
+                if(keysEntered.slice(0,1 === '-')){
+                    revStr = '+'+keysEntered.slice(1, keysEntered.length);  //- -> +
+                }else{
+                    keysEntered = '-'+keysEntered;  //+ -> -
+                }
+                //content.textContent = valuesEntered[0].toString(); 
+                setContent(keysEntered);
+                console.log('478-' + keysEntered);
+                */
             }
+            if(operator === null){console.log(`468- operator ${operator} is null`);}
+            else{
+                console.log(`470- operator is ${operator} `);
+            }
+            
             if((!(first === null))&&(operator === null)){
-                console.log('395-'+ valuesEntered[0]);
+                console.log('474-'+ valuesEntered[0]);
                 valuesEntered[0]= valuesEntered[0]*-1;  // + -> - or - -> +
                 //content.textContent = valuesEntered[0].toString(); 
                 setContent(valuesEntered[0].toString());
-                console.log('397-' + valuesEntered[0]);
+                console.log('478-' + valuesEntered[0]);
             }else{
-                const temp0 = valuesEntered[0].toString();
-                if(!valuesEntered[1]=== null){
+                console.log(`480- valuesEntered[0] is ${valuesEntered[0]}`);
+                console.log(`481- valuesEntered[1] is ${valuesEntered[1]}`);
+                if(!(valuesEntered[0] === (null || undefined) ) && !(valuesEntered[1]=== (null || undefined))){
+                    const temp0 = valuesEntered[0].toString();
                     const temp1 = valuesEntered[1].toString();
                     //content.textContent = `${temp0} ${temp1} ${keysEntered}`;
                     setContent(`${temp0} ${temp1} ${keysEntered}`);
                 }else{
-                    //content.textContent = `error at 411`;
-                    setContent(`error at 411`);
+                    //content.textContent = `error at 488`;
+                   // setContent(`error at 489`);
                 }
             }
+            
             break;
         }
     }
 }
 
 function obtainResult() {
-    console.log(`381-result : ${result}`);
-    console.log(`operate( ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]})`);
-    console.log(typeof valuesEntered[0]);
-    console.log(typeof valuesEntered[1]);
-    console.log(typeof valuesEntered[2]);
+    //console.log(`381-result : ${result}`);
+    //console.log(`operate( ${valuesEntered[0]}, ${valuesEntered[1]}, ${valuesEntered[2]})`);
+    //console.log(typeof valuesEntered[0]);
+   // console.log(typeof valuesEntered[1]);
+    //console.log(typeof valuesEntered[2]);
     result =  operate(valuesEntered[0], valuesEntered[1], valuesEntered[2]);
     console.log(`444- result = ${result}` );
     //avoid rounding errors to many dec places
@@ -482,16 +545,19 @@ function obtainResult() {
         'second': valuesEntered[2]
     }
     historicEntries.push(resultObj);
-    console.log(`451-result : ${result}`);
-    console.log(`452-from: ${resultObj.first} ${resultObj.operator} ${resultObj.second}`);
-    //content.textContent=result;
+    console.log(`503-result : ${result}`);
+    console.log(`504-from: ${resultObj.first} ${resultObj.operator} ${resultObj.second}`);
+    for(let i=0; i< historicEntries.length; i++){
+        console.log(`506-historic: ${historicEntries[i].first} ${historicEntries[i].operator} ${historicEntries[i].second} = ${historicEntries[i].result}`);
+    }
+    content.textContent=result;
     setContent(result.toString());
     showHistory();
     resetValues();
 }
 
 function resetValues(){
-    //content.textContent='';
+    console.log('resetting values');
     keysEntered = '';
     valuesEntered = [];
     numLength = 0;
@@ -505,14 +571,14 @@ function resetValues(){
 }
 
 function setContent(text){
-    console.log('at setContent($$ '+text+' $$)');
+    //console.log('at setContent(text)');
     if(text.length > 16){
         content.style.fontSize= '20px';
     }else{
         content.style.fontSize= '40px';
     }
     content.textContent = text;
-    console.log('post setContent($$ '+text+' $$)');
+    //console.log('post setContent(text)');
 }
 
 

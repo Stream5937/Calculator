@@ -39,19 +39,21 @@ isolated functions
 	clear history values
 	clear history display
 	copy valid inputs to history
-	set up local storage for history and undo functions
+	set up local storage for history and undo functions   -> unnecessary!
 	
 ////////////   ISSUES   //////////////
-issues with content display, sign and decimals plus history display
+issues with content display, sign and decimals plus history display -> ok done
 make font smaller when display area exceeded -> ok done
 deal with calculation overflow issue -> ok done
 set content display right justified? -> ok done
-display of first disappears when second sign changed -> ok Done
-clear content display if another number entered after result before an operator -> ok Done
+display of first disappears when second sign changed -> oK re-done 
+clear content display if another number entered after result before an operator -> ok done (repeated below) 
 display decimal point as entered not wait for next number-> OK Done
-error in allowing two numbers entered without operator
-division by zero error
-
+error in allowing two numbers entered following result - without operator -> ok done
+division by zero error-> ok done ?
+need to correct display when changing sign of second number -> ok done
+action of last character delete
+entering num op num op should show error or just give result
 
 
 	
