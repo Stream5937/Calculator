@@ -55,6 +55,7 @@ need to correct display when changing sign of second number -> ok done
 action of last character delete
 entering num op num op should show error or just give result
 
+deal with enter = before operator error -> ok done
 
 	
 					  
